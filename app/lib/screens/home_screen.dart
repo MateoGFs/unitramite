@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'assistant_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -24,16 +26,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _submit([String? _]) {
     final question = _controller.text.trim();
     if (question.isEmpty) return;
-    // Provisional: en la Tarea 3 esto abrirá la pantalla del asistente.
-    _showMessage('Pregunta recibida: $question');
+    _controller.clear();
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => AssistantScreen(initialQuestion: question),
+      ),
+    );
   }
 
   @override
@@ -90,9 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     for (final category in _categories)
                       ActionChip(
                         label: Text(category),
-                        onPressed: () => _showMessage(
-                          '$category: se activará más adelante',
-                        ),
+                        onPressed: () =>
+                            _showMessage('$category: se activará más adelante'),
                       ),
                   ],
                 ),
