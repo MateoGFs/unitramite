@@ -1,0 +1,15 @@
+# Secretos: NUNCA subir
+.env
+*.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Datos generados por el backend
+backend/storage/
+
+# Sistema
+.DS_Store
+Thumbs.db
