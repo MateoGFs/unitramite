@@ -4,13 +4,13 @@ import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
 import 'providers/chat_provider.dart';
 import 'screens/home_screen.dart';
-import 'services/mock_assistant_service.dart';
+import 'services/api_assistant_service.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
       // Cuando exista el backend, aquí cambiaremos el servicio simulado.
-      create: (_) => ChatProvider(MockAssistantService()),
+      create: (_) => ChatProvider(ApiAssistantService()),
       child: const UniTramiteApp(),
     ),
   );
