@@ -10,7 +10,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise SystemExit("Falta GEMINI_API_KEY en backend/.env")
 
-model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 embedding_model = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-001")
 client = genai.Client(api_key=api_key)
 
