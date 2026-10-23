@@ -11,11 +11,27 @@ import 'assistant_service.dart';
 /// Servicio real: consulta al backend FastAPI.
 class ApiAssistantService implements AssistantService {
   ApiAssistantService({http.Client? client, String? baseUrl})
-      : _client = client ?? http.Client(),
-        _baseUrl = baseUrl ?? AppConstants.apiBaseUrl;
+    : _client = client ?? http.Client(),
+      _baseUrl = baseUrl ?? AppConstants.apiBaseUrl;
 
   final http.Client _client;
   final String _baseUrl;
+
+  /// Extrae el mensaje de error que envía el backend (campo "detail").
+  String _errorMessage(http.Response response) {
+    const fallback =
+        'El servidor no pudo procesar tu pregunta. '
+        'Intenta de nuevo en un momento.';
+    try {
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      if (data is Map<String, dynamic> && data['detail'] is String) {
+        return data['detail'] as String;
+      }
+    } catch (_) {
+      // Si no se puede leer, se usa el mensaje genérico.
+    }
+    return fallback;
+  }
 
   @override
   Future<AssistantAnswer> ask(String question) async {
@@ -31,25 +47,20 @@ class ApiAssistantService implements AssistantService {
           .timeout(AppConstants.requestTimeout);
 
       if (response.statusCode != 200) {
-        throw const AssistantException(
-          'El servidor no pudo procesar tu pregunta. '
-          'Intenta de nuevo en un momento.',
-        );
+        throw AssistantException(_errorMessage(response));
       }
 
       final data =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
 
-      final sources = (data['sources'] as List<dynamic>? ?? [])
-          .map((item) {
-            final map = item as Map<String, dynamic>;
-            return SourceRef(
-              documentName: map['document_name'] as String,
-              page: map['page'] as int?,
-              url: map['url'] as String?,
-            );
-          })
-          .toList();
+      final sources = (data['sources'] as List<dynamic>? ?? []).map((item) {
+        final map = item as Map<String, dynamic>;
+        return SourceRef(
+          documentName: map['document_name'] as String,
+          page: map['page'] as int?,
+          url: map['url'] as String?,
+        );
+      }).toList();
 
       return AssistantAnswer(
         text: data['answer'] as String,
