@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unitramite_app/screens/app_shell.dart';
 
 import 'core/theme/app_theme.dart';
 import 'providers/chat_provider.dart';
-import 'screens/home_screen.dart';
 import 'services/api_assistant_service.dart';
 
 void main() {
@@ -25,7 +25,7 @@ class UniTramiteApp extends StatelessWidget {
       title: 'UniTrámite',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const HomeScreen(),
+      home: const AppShell(),
     );
   }
 }
