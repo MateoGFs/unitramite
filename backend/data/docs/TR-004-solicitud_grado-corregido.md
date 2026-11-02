@@ -1,6 +1,12 @@
 ---
-
-## id: TR-004 nombre: Solicitud de graduación de pregrado categoria: Académico estado: borrador dependencia\_responsable: OCARA fecha\_verificacion: 2026-10-27 contacto: [asesoria6ocara@udenar.edu.co](mailto:asesoria6ocara@udenar.edu.co)
+id: TR-004
+nombre: Solicitud de graduación de pregrado
+categoria: Académico
+estado: borrador
+dependencia_responsable: OCARA
+fecha_verificacion: 2026-10-27
+contacto: asesoria6ocara@udenar.edu.co
+---
 
 # Solicitud de graduación de pregrado
 

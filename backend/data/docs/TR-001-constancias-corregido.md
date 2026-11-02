@@ -1,6 +1,12 @@
 ---
-
-## id: TR-001 nombre: Generación de constancias categoría: Académico estado: borrador dependencia\_responsable: OCARA fecha\_verificacion: 2026-10-27 contacto: [asesoria6ocara@udenar.edu.co](mailto:asesoria6ocara@udenar.edu.co)
+id: TR-001
+nombre: Generación de constancias
+categoria: Académico
+estado: borrador
+dependencia_responsable: OCARA
+fecha_verificacion: 2026-10-27
+contacto: asesoria6ocara@udenar.edu.co
+---
 
 # Generación de constancias
 
@@ -43,12 +49,14 @@ Otras solicitudes, como copias de actas de grado, certificados de notas con cré
 
 ## Condiciones importantes
 
-- Verificar el tipo de constancia antes de generarla: una vez generada, no se puede cambiar a otro tipo usando el mismo recibo de pago.  
-- La información proporcionada indica que la constancia queda disponible en el sistema durante un mes. Este plazo debe confirmarse en el instructivo oficial vigente antes de presentarlo como una condición garantizada.  
-- Los tiempos de activación del pago dependen del medio utilizado. La información de la tabla consultada no detalla esos tiempos; verificar las [instrucciones oficiales de pago](https://www.udenar.edu.co/instruccionespago/) o consultar a Informática si el pago no se refleja.  
-- Si el pago no se activa, contactar a Informática mediante el correo [ci@udenar.edu.co](mailto:ci@udenar.edu.co) o el teléfono 7244309, extensión 1100, adjuntando el comprobante de pago. Estos datos proceden de la información recopilada y deben confirmarse si el contacto falla.  
-- Si una persona graduada no recuerda su código o clave, la información recopilada recomienda contactar a Informática por los mismos canales.  
-- La validez de una constancia se puede consultar mediante su código QR o escribiendo a [ocara@udenar.edu.co](mailto:ocara@udenar.edu.co).
+- Verificar el tipo de constancia antes de generarla: una vez generada, no se puede cambiar a otro tipo usando el mismo recibo de pago.
+- La constancia queda disponible en el sistema durante un mes. Pasado ese tiempo hay que registrar otro pago para solicitarla de nuevo.
+- Pagos por PSE: se activan en el transcurso de 24 a 48 horas.
+- Pagos por ventanilla en Bancolombia, Banco de Bogotá, Banco de Occidente, AV Villas, BBVA y Colpatria: se reflejan inmediatamente.
+- Pagos en corresponsales bancarios distintos a Bancolombia: pueden tardar hasta 48 horas hábiles.
+- Si el pago no se activa a tiempo, contactar a Informática por el correo ci@udenar.edu.co o el teléfono 7244309, extensión 1100, adjuntando el comprobante de pago.
+- Si una persona graduada no recuerda su código o clave, debe contactar a Informática por los mismos canales.
+- La validez de una constancia se puede consultar mediante su código QR o escribiendo a ocara@udenar.edu.co.
 
 ## Información susceptible a cambios
 

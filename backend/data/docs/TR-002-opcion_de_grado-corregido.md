@@ -1,6 +1,12 @@
 ---
-
-## id: TR-002 nombre: Inscripción de opción de grado categoria: Académico estado: borrador dependencia\_responsable: Secretaría o decanatura de la facultad correspondiente fecha\_verificacion: 2026-10-27 contacto: [asesoria6ocara@udenar.edu.co](mailto:asesoria6ocara@udenar.edu.co)
+id: TR-002
+nombre: Inscripción de opción de grado
+categoria: Académico
+estado: borrador
+dependencia_responsable: Secretaría o decanatura de la facultad correspondiente
+fecha_verificacion: 2026-10-27
+contacto: asesoria6ocara@udenar.edu.co
+---
 
 # Inscripción de opción de grado
 

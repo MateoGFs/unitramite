@@ -1,6 +1,12 @@
 ---
-
-## id: TR-003 nombre: Homologación de materias categoria: Académico estado: borrador dependencia\_responsable: OCARA / Oficina de Control, Registro Académico y Admisiones fecha\_verificacion: 2026-10-27 contacto: [asesoria6ocara@udenar.edu.co](mailto:asesoria6ocara@udenar.edu.co)
+id: TR-003
+nombre: Homologación de materias
+categoria: Académico
+estado: borrador
+dependencia_responsable: OCARA / Oficina de Control, Registro Académico y Admisiones
+fecha_verificacion: 2026-10-27
+contacto: asesoria6ocara@udenar.edu.co
+---
 
 # Homologación de materias
 

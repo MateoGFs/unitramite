@@ -1,6 +1,12 @@
 ---
-
-## id: TR-005 nombre: Cancelación de semestre categoria: Académico estado: borrador dependencia\_responsable: OCARA fecha\_verificacion: 2026-10-27 contacto: [ocara@udenar.edu.co](mailto:ocara@udenar.edu.co)
+id: TR-005
+nombre: Cancelación de semestre
+categoria: Académico
+estado: borrador
+dependencia_responsable: OCARA
+fecha_verificacion: 2026-10-27
+contacto: ocara@udenar.edu.co
+---
 
 # Cancelación de semestre
 

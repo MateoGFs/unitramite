@@ -1,6 +1,12 @@
 ---
-
-## id: TR-007 nombre: Solicitud de reserva de cupo categoria: Académico estado: borrador dependencia\_responsable: OCARA fecha\_verificacion: 2026-10-27 contacto: [ocara@udenar.edu.co](mailto:ocara@udenar.edu.co)
+id: TR-007
+nombre: Solicitud de reserva de cupo
+categoria: Académico
+estado: borrador
+dependencia_responsable: OCARA
+fecha_verificacion: 2026-10-27
+contacto: ocara@udenar.edu.co
+---
 
 # Solicitud de reserva de cupo
 
