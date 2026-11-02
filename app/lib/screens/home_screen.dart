@@ -14,7 +14,10 @@ import 'assistant_screen.dart';
 /// Pantalla de inicio. Solo compone widgets; la lógica del chat sigue en
 /// ChatProvider y AssistantScreen.
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.onSeeAllTramites, this.onSearch});
+
+  final VoidCallback? onSeeAllTramites;
+  final ValueChanged<String>? onSearch;
 
   static const List<QuickQuestion> _quickQuestions = [
     QuickQuestion(
@@ -48,7 +51,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeAppBar(
-        onMenuPressed: () => _showMessage(context, 'Menú: se activará más adelante'),
+        onMenuPressed: () =>
+            _showMessage(context, 'Menú: se activará más adelante'),
         onProfilePressed: () =>
             _showMessage(context, 'Perfil: se activará más adelante'),
       ),
@@ -60,8 +64,14 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
               children: [
                 SearchHeroCard(
-                  onSearch: (question) =>
-                      _openAssistant(context, question: question),
+                  onSearch: (query) {
+                    final search = onSearch;
+                    if (search != null) {
+                      search(query);
+                    } else {
+                      _openAssistant(context, question: query);
+                    }
+                  },
                 ),
                 const SizedBox(height: 20),
                 AssistantCard(
@@ -79,10 +89,12 @@ class HomeScreen extends StatelessWidget {
                       style: AppTextStyles.sectionTitle,
                     ),
                     TextButton(
-                      onPressed: () => _showMessage(
-                        context,
-                        'El catálogo completo se activará más adelante',
-                      ),
+                      onPressed:
+                          onSeeAllTramites ??
+                          () => _showMessage(
+                            context,
+                            'El catálogo completo se activará más adelante',
+                          ),
                       style: TextButton.styleFrom(
                         foregroundColor: AppColors.primary,
                         visualDensity: VisualDensity.compact,
