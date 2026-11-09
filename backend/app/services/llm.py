@@ -60,20 +60,37 @@ def _to_llm_error(error: Exception | None) -> LLMError:
     )
 
 
-def _call_model(model: str, prompt: str, system_instruction: str | None) -> str:
+def _call_model(
+    model: str,
+    prompt: str,
+    system_instruction: str | None,
+    response_schema,
+) -> str:
+    config_kwargs = {
+        "system_instruction": system_instruction,
+        "temperature": 0.2,
+    }
+    if response_schema is not None:
+        config_kwargs["response_mime_type"] = "application/json"
+        config_kwargs["response_schema"] = response_schema
+
     response = _client.models.generate_content(
         model=model,
         contents=prompt,
-        config=types.GenerateContentConfig(
-            system_instruction=system_instruction,
-            temperature=0.2,
-        ),
+        config=types.GenerateContentConfig(**config_kwargs),
     )
     return (response.text or "").strip()
 
 
-def generate_answer(prompt: str, system_instruction: str | None = None) -> str:
-    """Genera una respuesta con reintentos y modelo de respaldo."""
+def generate_answer(
+    prompt: str,
+    system_instruction: str | None = None,
+    response_schema=None,
+) -> str:
+    """Genera una respuesta con reintentos y modelo de respaldo.
+
+    Si se pasa response_schema (un modelo pydantic), la respuesta es un JSON.
+    """
     if _client is None:
         raise LLMError("El servicio de IA no está configurado en el servidor.")
 
@@ -87,7 +104,7 @@ def generate_answer(prompt: str, system_instruction: str | None = None) -> str:
         attempts = 2 if index == 0 else 1  # el respaldo se intenta una sola vez
         for attempt in range(1, attempts + 1):
             try:
-                text = _call_model(model, prompt, system_instruction)
+                text = _call_model(model, prompt, system_instruction, response_schema)
             except Exception as e:
                 last_error = e
                 logger.warning(

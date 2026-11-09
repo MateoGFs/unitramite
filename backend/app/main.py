@@ -3,8 +3,9 @@ import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .schemas import AskRequest, AskResponse
-from .services.llm import LLMError, generate_answer
+from .rag.answering import answer_question
+from .schemas import AskRequest, AskResponse, Source
+from .services.llm import LLMError
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,9 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# PROVISIONAL: se reemplaza por el prompt del RAG en la Tarea 8.
-TEST_SYSTEM_PROMPT = "Responde en español, de forma breve y clara."
-
 
 @app.get("/health")
 def health():
@@ -30,16 +28,12 @@ def health():
 @app.post("/ask", response_model=AskResponse)
 def ask(request: AskRequest):
     try:
-        text = generate_answer(
-            request.question, system_instruction=TEST_SYSTEM_PROMPT
-        )
+        result = answer_question(request.question)
     except LLMError as e:
         raise HTTPException(status_code=503, detail=e.user_message)
 
-    # PROVISIONAL: aún sin documentos, así que el modelo responde con su
-    # conocimiento general y puede equivocarse. El prefijo lo advierte.
     return AskResponse(
-        answer=f"[PRUEBA SIN DOCUMENTOS] {text}",
-        sources=[],
-        found=True,
+        answer=result.answer,
+        found=result.found,
+        sources=[Source(document_name=s.title, url=s.url) for s in result.sources],
     )

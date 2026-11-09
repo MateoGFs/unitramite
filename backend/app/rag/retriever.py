@@ -5,7 +5,7 @@ from functools import lru_cache
 
 import numpy as np
 
-from ..config import INDEX_PATH
+from ..config import INDEX_PATH, MAX_DOCS, MIN_SIMILARITY, SCORE_MARGIN
 from .embeddings import embed_texts
 
 
@@ -66,5 +66,19 @@ def rank_documents(query_vector: np.ndarray) -> list[DocMatch]:
 
 def search(question: str) -> list[DocMatch]:
     """Embebe la pregunta y devuelve los trámites ordenados por relevancia."""
-    vector = embed_texts([question], task_type="RETRIEVAL_QUERY")[0]
+    vector = embed_texts(
+        [question], task_type="RETRIEVAL_QUERY", max_retries=2, retry_delay=1.5
+    )[0]
     return rank_documents(vector)
+
+
+def select_matches(matches: list[DocMatch]) -> list[DocMatch]:
+    """Trámites que se le entregan a la IA: los relevantes y cercanos al mejor."""
+    if not matches or matches[0].score < MIN_SIMILARITY:
+        return []
+    best = matches[0].score
+    return [
+        m
+        for m in matches[:MAX_DOCS]
+        if m.score >= MIN_SIMILARITY and m.score >= best - SCORE_MARGIN
+    ]

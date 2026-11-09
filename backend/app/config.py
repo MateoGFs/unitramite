@@ -15,9 +15,16 @@ GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-0
 EMBEDDING_DIM = int(os.getenv("GEMINI_EMBEDDING_DIM", "768"))
 
 # Tiempo máximo de espera por cada llamada a Gemini.
-GEMINI_TIMEOUT_SECONDS = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "60"))
+GEMINI_TIMEOUT_SECONDS = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "15"))
 
 # Base documental e índice generado.
 DOCS_DIR = BASE_DIR / "data" / "docs"
 STORAGE_DIR = BASE_DIR / "storage"
 INDEX_PATH = STORAGE_DIR / "index.json"
+
+
+
+# Búsqueda de trámites (calibrados con scripts/eval_retrieval.py).
+MIN_SIMILARITY = float(os.getenv("RAG_MIN_SIMILARITY", "0.60"))
+SCORE_MARGIN = float(os.getenv("RAG_SCORE_MARGIN", "0.05"))
+MAX_DOCS = int(os.getenv("RAG_MAX_DOCS", "3"))
