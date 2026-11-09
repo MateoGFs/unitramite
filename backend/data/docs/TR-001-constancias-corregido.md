@@ -43,7 +43,7 @@ Otras solicitudes, como copias de actas de grado, certificados de notas con cré
 
 1. **Generar el recibo:** ingresar al [formulario de recibo para constancias](https://ci.udenar.edu.co:8082/recibos/Tesoreria/ImpresionInternetEve_p.aspx?id=27) y completar los campos con los datos actualizados del estudiante.  
 2. **Pagar el recibo:** realizar el pago siguiendo las [instrucciones oficiales de pago](https://www.udenar.edu.co/instruccionespago/). Es necesario que el pago se registre para continuar.  
-3. **Ingresar al sistema de matrícula:** abrir el [sistema de matrículas](https://matriculas.udenar.edu.co/matriculasudenar/index.php) e iniciar sesión con el código estudiantil y la clave. La tabla de fuentes consultada indica que la opción se encuentra en el menú **Servicios**.  
+3. **Ingresar al sistema de matrícula:** entrar a la página www.udenar.edu.co, menú **Servicios**, opción **Sistema de información académica**, opción **Matrícula académica** ([sistema de matrículas](https://matriculas.udenar.edu.co/matriculasudenar/index.php)), e iniciar sesión con el código estudiantil y la clave.
 4. **Abrir Constancias en línea:** seleccionar esa opción e ingresar el número del recibo generado.  
 5. **Generar la constancia:** elegir cuidadosamente el tipo de constancia y pulsar **Generar constancia**. La descarga debe iniciarse automáticamente; si no ocurre, revisar si el navegador bloqueó las ventanas emergentes.
 
