@@ -28,7 +28,7 @@ def health():
 @app.post("/ask", response_model=AskResponse)
 def ask(request: AskRequest):
     try:
-        result = answer_question(request.question)
+        result = answer_question(request.question, request.history)
     except LLMError as e:
         raise HTTPException(status_code=503, detail=e.user_message)
 

@@ -17,13 +17,13 @@ class ChatProvider extends ChangeNotifier {
   Future<void> sendQuestion(String question) async {
     final text = question.trim();
     if (text.isEmpty || _isLoading) return;
-
+    final history = _recentHistory();
     _messages.add(ChatMessage(text: text, role: MessageRole.user));
     _isLoading = true;
     notifyListeners();
 
     try {
-      final answer = await _service.ask(text);
+      final answer = await _service.ask(text, history: history);
       _messages.add(
         ChatMessage(
           text: answer.text,
@@ -58,5 +58,12 @@ class ChatProvider extends ChangeNotifier {
     if (_isLoading) return;
     _messages.clear();
     notifyListeners();
+  }
+
+    /// Últimos mensajes útiles de la conversación, para dar contexto a la IA.
+  List<ChatMessage> _recentHistory() {
+    final useful =
+        _messages.where((m) => m.status != MessageStatus.error).toList();
+    return useful.length > 6 ? useful.sublist(useful.length - 6) : useful;
   }
 }

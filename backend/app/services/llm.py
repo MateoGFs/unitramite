@@ -86,6 +86,8 @@ def generate_answer(
     prompt: str,
     system_instruction: str | None = None,
     response_schema=None,
+    primary_attempts: int = 2,
+    use_fallback: bool = True,
 ) -> str:
     """Genera una respuesta con reintentos y modelo de respaldo.
 
@@ -95,13 +97,13 @@ def generate_answer(
         raise LLMError("El servicio de IA no está configurado en el servidor.")
 
     models = [GEMINI_MODEL]
-    if GEMINI_FALLBACK_MODEL and GEMINI_FALLBACK_MODEL != GEMINI_MODEL:
+    if use_fallback and GEMINI_FALLBACK_MODEL and GEMINI_FALLBACK_MODEL != GEMINI_MODEL:
         models.append(GEMINI_FALLBACK_MODEL)
 
     last_error: Exception | None = None
 
     for index, model in enumerate(models):
-        attempts = 2 if index == 0 else 1  # el respaldo se intenta una sola vez
+        attempts = primary_attempts if index == 0 else 1  # el respaldo, una sola vez
         for attempt in range(1, attempts + 1):
             try:
                 text = _call_model(model, prompt, system_instruction, response_schema)

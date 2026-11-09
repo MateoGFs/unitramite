@@ -7,6 +7,7 @@ import '../core/constants/app_constants.dart';
 import '../models/assistant_answer.dart';
 import '../models/source_ref.dart';
 import 'assistant_service.dart';
+import '../models/chat_message.dart';
 
 /// Servicio real: consulta al backend FastAPI.
 class ApiAssistantService implements AssistantService {
@@ -33,8 +34,26 @@ class ApiAssistantService implements AssistantService {
     return fallback;
   }
 
+    /// Convierte los últimos mensajes en el formato que espera el backend.
+  List<Map<String, String>> _historyPayload(List<ChatMessage> history) {
+    final useful =
+        history.where((m) => m.status != MessageStatus.error).toList();
+    final recent =
+        useful.length > 6 ? useful.sublist(useful.length - 6) : useful;
+    return recent
+        .map(
+          (m) => {
+            'role': m.role == MessageRole.user ? 'user' : 'assistant',
+            'text': m.text.length > 800 ? m.text.substring(0, 800) : m.text,
+          },
+        )
+        .toList();
+  }
   @override
-  Future<AssistantAnswer> ask(String question) async {
+  Future<AssistantAnswer> ask(
+    String question, {
+    List<ChatMessage> history = const [],
+  }) async {
     final uri = Uri.parse('$_baseUrl/ask');
 
     try {
@@ -42,7 +61,10 @@ class ApiAssistantService implements AssistantService {
           .post(
             uri,
             headers: {'Content-Type': 'application/json; charset=utf-8'},
-            body: jsonEncode({'question': question}),
+            body: jsonEncode({
+              'question': question,
+              'history': _historyPayload(history),
+            }),
           )
           .timeout(AppConstants.requestTimeout);
 

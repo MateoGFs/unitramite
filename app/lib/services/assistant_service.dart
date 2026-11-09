@@ -1,7 +1,13 @@
 import '../models/assistant_answer.dart';
+import '../models/chat_message.dart';
 
 abstract class AssistantService {
-  Future<AssistantAnswer> ask(String question);
+  /// [history] son los mensajes anteriores de la conversación, sin la
+  /// pregunta actual. Sirven para entender preguntas de seguimiento.
+  Future<AssistantAnswer> ask(
+    String question, {
+    List<ChatMessage> history = const [],
+  });
 }
 
 /// Error esperado con un mensaje que se puede mostrar al usuario.

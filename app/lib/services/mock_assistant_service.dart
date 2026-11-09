@@ -1,13 +1,17 @@
 import '../models/assistant_answer.dart';
 import '../models/source_ref.dart';
 import 'assistant_service.dart';
+import '../models/chat_message.dart';
 
 /// Servicio simulado para probar la interfaz. Se reemplazará por el real.
 /// - Si la pregunta contiene "error": simula un fallo de conexión.
 /// - Si contiene "inexistente": simula que no hay información.
 class MockAssistantService implements AssistantService {
   @override
-  Future<AssistantAnswer> ask(String question) async {
+  Future<AssistantAnswer> ask(
+    String question, {
+    List<ChatMessage> history = const [],
+  }) async {
     await Future<void>.delayed(const Duration(seconds: 2));
     final q = question.toLowerCase();
 
