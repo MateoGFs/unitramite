@@ -6,9 +6,10 @@ from google.genai import errors, types
 
 from ..config import (
     GEMINI_API_KEY,
-    GEMINI_FALLBACK_MODEL,
+    GEMINI_FALLBACK_MODELS,
     GEMINI_MODEL,
     GEMINI_TIMEOUT_SECONDS,
+    GEMINI_TOTAL_BUDGET_SECONDS,
 )
 
 logger = logging.getLogger("unitramite.llm")
@@ -89,22 +90,28 @@ def generate_answer(
     primary_attempts: int = 2,
     use_fallback: bool = True,
 ) -> str:
-    """Genera una respuesta con reintentos y modelo de respaldo.
+    """Genera una respuesta con reintentos, modelos de respaldo y tiempo límite.
 
     Si se pasa response_schema (un modelo pydantic), la respuesta es un JSON.
     """
     if _client is None:
         raise LLMError("El servicio de IA no está configurado en el servidor.")
 
-    models = [GEMINI_MODEL]
-    if use_fallback and GEMINI_FALLBACK_MODEL and GEMINI_FALLBACK_MODEL != GEMINI_MODEL:
-        models.append(GEMINI_FALLBACK_MODEL)
+    models: list[str] = []
+    candidates = [GEMINI_MODEL, *(GEMINI_FALLBACK_MODELS if use_fallback else [])]
+    for name in candidates:
+        if name and name not in models:
+            models.append(name)
 
+    deadline = time.monotonic() + GEMINI_TOTAL_BUDGET_SECONDS
     last_error: Exception | None = None
 
     for index, model in enumerate(models):
-        attempts = primary_attempts if index == 0 else 1  # el respaldo, una sola vez
+        attempts = primary_attempts if index == 0 else 1  # cada respaldo, una vez
         for attempt in range(1, attempts + 1):
+            if time.monotonic() >= deadline:
+                logger.warning("Se agotó el tiempo total para consultar la IA.")
+                break
             try:
                 text = _call_model(model, prompt, system_instruction, response_schema)
             except Exception as e:

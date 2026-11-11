@@ -23,6 +23,8 @@ QUESTIONS = [
     ("quiero graduarme el otro año, que tengo que hacer", "TR-004"),
     ("ya pase todas las materias pero no he presentado ingles, me puedo graduar?", "TR-004"),
     ("puedo cancelar el semestre solo porque no me va bien o tiene que ser por una razon grave?", "TR-005"),
+    ("estoy en octavo semestre y voy a prestar el servicio militar, puedo reservar el cupo?", "TR-007"),
+    ("¿qué datos trae la constancia de matrícula?", "TR-001"),
 ]
 
 

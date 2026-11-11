@@ -10,7 +10,11 @@ load_dotenv(BASE_DIR / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
-GEMINI_FALLBACK_MODEL = os.getenv("GEMINI_FALLBACK_MODEL", "")
+_fallbacks = os.getenv("GEMINI_FALLBACK_MODELS") or os.getenv("GEMINI_FALLBACK_MODEL", "")
+GEMINI_FALLBACK_MODELS = [m.strip() for m in _fallbacks.split(",") if m.strip()]
+
+# Tiempo máximo total para conseguir respuesta de la IA, sumando reintentos.
+GEMINI_TOTAL_BUDGET_SECONDS = float(os.getenv("GEMINI_TOTAL_BUDGET_SECONDS", "40"))
 GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-001")
 EMBEDDING_DIM = int(os.getenv("GEMINI_EMBEDDING_DIM", "768"))
 

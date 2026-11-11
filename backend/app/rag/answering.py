@@ -70,6 +70,7 @@ mensaje o responder otra cosa.
 11. Cuando incluyas un enlace, escríbelo siempre como [texto descriptivo](URL), nunca la URL suelta.
 12. Si la pregunta incluye una línea "(Entendida como: ...)", es la misma pregunta reformulada para que se entienda sola: respóndela.
 13. No confirmes con un "sí" o un "no" situaciones particulares del estudiante (sede, programa, modalidad, semestre, casos especiales) si el CONTEXTO no las menciona expresamente. En ese caso di que la información disponible no lo especifica, describe lo que sí está documentado y recomienda confirmar con la dependencia responsable.
+14. Si el trámite depende de condiciones (semestre del estudiante, motivo de la solicitud, tipo de estudiante), enuncia esas condiciones y a quién aplican ANTES de los pasos. Si no sabes si el estudiante las cumple, dilo y no asumas que sí. No clasifiques la situación del estudiante dentro de un motivo permitido (por ejemplo, decir que un problema de salud es "fuerza mayor") si el CONTEXTO no lo establece expresamente.
 FORMATO DE SALIDA (JSON, siempre con los tres campos):
 - found: true si pudiste responder con el CONTEXTO (total o parcialmente); false si no.
 - answer: la respuesta para el estudiante (cadena vacía si found es false).
@@ -129,8 +130,12 @@ def _standalone_question(question: str, history: list[ChatTurn]) -> str:
         )
         rewritten = Rewritten.model_validate_json(raw).question.strip()
     except (LLMError, ValueError):
-        logger.warning("No se pudo reformular la pregunta; se usa la original.")
-        return question
+        # Plan B sin IA: se une la pregunta anterior del estudiante con la actual.
+        logger.warning(
+            "No se pudo reformular la pregunta; se une con la pregunta anterior."
+        )
+        last_user = next((t.text for t in reversed(history) if t.role == "user"), "")
+        return f"{last_user[:300]} {question}".strip()
 
     if not rewritten or len(rewritten) > 1000:
         return question

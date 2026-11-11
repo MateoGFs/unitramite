@@ -33,6 +33,12 @@ Según la información institucional recopilada, se pueden generar en línea:
 
 Otras solicitudes, como copias de actas de grado, certificados de notas con créditos u otras constancias con criterios específicos, se deben consultar con OCARA. La información suministrada indica el correo [asesoria6ocara@udenar.edu.co](mailto:asesoria6ocara@udenar.edu.co) y que se debe anexar el recibo de pago; conviene confirmar con la dependencia el procedimiento aplicable al caso concreto.
 
+## Qué información contiene cada constancia
+- **Constancia de matrícula para estudiantes regulares:** nombre del estudiante, cédula de ciudadanía, periodo actual en el que está matriculado, facultad, programa, SNIES, semestre, jornada, número de materias matriculadas e intensidad horaria.
+- **Constancia de matrícula para estudiantes egresados:** nombre del estudiante, cédula de ciudadanía, periodo actual en el que está matriculado como egresado, facultad, programa, SNIES y fecha de finalización del plan de estudios.
+- **Certificado de notas:** nombre del estudiante, cédula de ciudadanía, código estudiantil, facultad, programa y calificaciones de cada periodo académico (cada asignatura con su nota definitiva en escala de cero a cinco y su intensidad horaria semanal), con el promedio parcial de cada periodo y el promedio acumulado.
+- **Constancia de egreso (paz y salvo académico):** nombre del estudiante, cédula de ciudadanía, facultad, programa, SNIES y fecha de finalización del plan de estudios.
+
 ## Requisitos confirmados
 
 - Ser estudiante regular o egresado, según el tipo de constancia.  
@@ -86,3 +92,4 @@ OCARA / Oficina de Control, Registro Académico y Admisiones.
 2. Necesito una constancia de matrícula.  
 3. ¿Cuánto vale el certificado?  
 4. ¿Puedo pedirlo si estudio en Tumaco?
+5. ¿Qué datos trae la constancia de matrícula?
