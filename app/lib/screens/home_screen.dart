@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/tramites_provider.dart';
+import '../widgets/tramite_card.dart';
 import 'assistant_screen.dart';
+import 'tramite_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,28 +16,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _controller = TextEditingController();
 
-  // Provisionales: más adelante saldrán de los documentos cargados.
-  static const List<String> _categories = [
-    'Trámites académicos',
-    'Certificados',
-    'Solicitudes administrativas',
-  ];
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  void _submit([String? _]) {
-    final question = _controller.text.trim();
-    if (question.isEmpty) return;
-    _controller.clear();
+  void _openAssistant([String? question]) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => AssistantScreen(initialQuestion: question),
@@ -41,12 +30,80 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _submit([String? _]) {
+    final question = _controller.text.trim();
+    if (question.isEmpty) return;
+    _controller.clear();
+    _openAssistant(question);
+  }
+
+  Widget _buildTramites(BuildContext context, TramitesProvider tramites) {
+    switch (tramites.status) {
+      case LoadStatus.idle:
+      case LoadStatus.loading:
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 24),
+          child: Center(child: CircularProgressIndicator()),
+        );
+      case LoadStatus.error:
+        return Card(
+          color: Theme.of(context).colorScheme.errorContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  tramites.error ?? 'No se pudieron cargar los trámites.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onErrorContainer,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                FilledButton.tonal(
+                  onPressed: tramites.load,
+                  child: const Text('Reintentar'),
+                ),
+              ],
+            ),
+          ),
+        );
+      case LoadStatus.loaded:
+        if (tramites.items.isEmpty) {
+          return const Text('Aún no hay trámites disponibles.');
+        }
+        return Column(
+          children: [
+            for (final tramite in tramites.items)
+              TramiteCard(
+                tramite: tramite,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => TramiteDetailScreen(summary: tramite),
+                  ),
+                ),
+              ),
+          ],
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tramites = context.watch<TramitesProvider>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('UniTrámite')),
+      appBar: AppBar(
+        title: const Text('UniTrámite'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.chat_bubble_outline),
+            tooltip: 'Abrir conversación',
+            onPressed: _openAssistant,
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -85,21 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
-                Text('Categorías', style: theme.textTheme.titleMedium),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final category in _categories)
-                      ActionChip(
-                        label: Text(category),
-                        onPressed: () =>
-                            _showMessage('$category: se activará más adelante'),
-                      ),
-                  ],
-                ),
+                const SizedBox(height: 32),
+                Text('Trámites disponibles', style: theme.textTheme.titleMedium),
+                const SizedBox(height: 12),
+                _buildTramites(context, tramites),
               ],
             ),
           ),

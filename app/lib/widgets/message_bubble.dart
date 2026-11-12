@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../core/utils/open_link.dart';
+import 'source_link.dart';
 import '../models/chat_message.dart';
-import '../models/source_ref.dart';
+
 import 'rich_message.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -70,7 +70,7 @@ class MessageBubble extends StatelessWidget {
                 Text('Fuentes consultadas', style: labelStyle),
                 const SizedBox(height: 4),
                 for (final source in message.sources)
-                  _SourceLink(
+                  SourceLink(
                     source: source,
                     color: linkColor,
                     style: theme.textTheme.bodySmall,
@@ -84,42 +84,3 @@ class MessageBubble extends StatelessWidget {
   }
 }
 
-class _SourceLink extends StatelessWidget {
-  const _SourceLink({
-    required this.source,
-    required this.color,
-    required this.style,
-  });
-
-  final SourceRef source;
-  final Color color;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    final url = source.url;
-    final label = Text(
-      '• ${source.label}',
-      style: style?.copyWith(
-        color: color,
-        decoration: url != null ? TextDecoration.underline : null,
-        decorationColor: color,
-      ),
-    );
-
-    if (url == null) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: label,
-      );
-    }
-
-    return InkWell(
-      onTap: () => openLink(context, url),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: label,
-      ),
-    );
-  }
-}

@@ -9,4 +9,6 @@ class AppConstants {
   );
 
   static const Duration requestTimeout = Duration(seconds: 60);
+  /// Tiempo máximo para cargar el catálogo de trámites (consultas sin IA).
+  static const Duration catalogTimeout = Duration(seconds: 15);
 }

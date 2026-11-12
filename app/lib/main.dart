@@ -3,14 +3,22 @@ import 'package:provider/provider.dart';
 
 import 'core/theme/app_theme.dart';
 import 'providers/chat_provider.dart';
+import 'providers/tramites_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/api_assistant_service.dart';
+import 'services/api_tramites_service.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      // Cuando exista el backend, aquí cambiaremos el servicio simulado.
-      create: (_) => ChatProvider(ApiAssistantService()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(ApiAssistantService()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TramitesProvider(ApiTramitesService())..load(),
+        ),
+      ],
       child: const UniTramiteApp(),
     ),
   );

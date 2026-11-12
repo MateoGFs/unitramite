@@ -23,3 +23,22 @@ class AskResponse(BaseModel):
     answer: str
     sources: list[Source] = []
     found: bool = True
+
+
+class TramiteSummary(BaseModel):
+    id: str
+    nombre: str
+    categoria: str
+    descripcion: str
+
+
+class TramiteDetail(TramiteSummary):
+    requisitos: list[str] = []
+    pasos: list[str] = []
+    condiciones: list[str] = []
+    referencia: list[str] = []
+    dependencia: str = ""
+    contacto: str = ""
+    fecha_verificacion: str = ""
+    preguntas: list[str] = []
+    fuentes: list[Source] = []
