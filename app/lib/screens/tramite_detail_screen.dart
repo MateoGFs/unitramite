@@ -7,11 +7,13 @@ import '../services/tramites_service.dart';
 import '../widgets/rich_message.dart';
 import '../widgets/source_link.dart';
 import 'assistant_screen.dart';
+import '../models/tramite_progress.dart';
+import '../providers/progress_provider.dart';
 
 class TramiteDetailScreen extends StatefulWidget {
-  const TramiteDetailScreen({super.key, required this.summary});
+  const TramiteDetailScreen({super.key, required this.tramiteId});
 
-  final TramiteSummary summary;
+  final String tramiteId;
 
   @override
   State<TramiteDetailScreen> createState() => _TramiteDetailScreenState();
@@ -27,7 +29,7 @@ class _TramiteDetailScreenState extends State<TramiteDetailScreen> {
   }
 
   Future<TramiteDetail> _load() =>
-      context.read<TramitesProvider>().detail(widget.summary.id);
+      context.read<TramitesProvider>().detail(widget.tramiteId);
 
   void _retry() => setState(() => _future = _load());
 
@@ -94,6 +96,9 @@ class _DetailBody extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
 
+    final progress = context.watch<ProgressProvider>();
+    final tracking = progress.byId(detail.id);
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 700),
@@ -127,6 +132,22 @@ class _DetailBody extends StatelessWidget {
               icon: const Icon(Icons.chat_bubble_outline),
               label: const Text('Preguntar al asistente'),
             ),
+            const SizedBox(height: 8),
+            if (tracking == null)
+              OutlinedButton.icon(
+                onPressed: detail.pasos.isEmpty
+                    ? null
+                    : () => context.read<ProgressProvider>().start(detail),
+                icon: const Icon(Icons.playlist_add_check),
+                label: const Text('Iniciar este trámite'),
+              )
+            else
+              _TrackingCard(
+                progress: tracking,
+                total: detail.pasos.length,
+                onStop: () =>
+                    context.read<ProgressProvider>().remove(detail.id),
+              ),
             if (detail.requisitos.isNotEmpty)
               _Section(
                 title: 'Requisitos',
@@ -135,7 +156,17 @@ class _DetailBody extends StatelessWidget {
             if (detail.pasos.isNotEmpty)
               _Section(
                 title: 'Pasos',
-                children: [_StepList(items: detail.pasos)],
+                children: [
+                  _StepList(
+                    items: detail.pasos,
+                    checked: tracking?.completed,
+                    onToggle: tracking == null
+                        ? null
+                        : (index) => context
+                            .read<ProgressProvider>()
+                            .toggleStep(detail.id, index),
+                  ),
+                ],
               ),
             if (detail.condiciones.isNotEmpty)
               _Section(
@@ -284,13 +315,18 @@ class _BulletList extends StatelessWidget {
 }
 
 class _StepList extends StatelessWidget {
-  const _StepList({required this.items});
+  const _StepList({required this.items, this.checked, this.onToggle});
 
   final List<String> items;
+
+  /// Pasos marcados. Si es null, no hay seguimiento y se muestran números.
+  final Set<int>? checked;
+  final ValueChanged<int>? onToggle;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tracking = checked != null && onToggle != null;
 
     return Column(
       children: [
@@ -300,18 +336,35 @@ class _StepList extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 12,
-                  child: Text(
-                    '${i + 1}',
-                    style: const TextStyle(fontSize: 12),
+                if (tracking)
+                  SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Checkbox(
+                      value: checked!.contains(i),
+                      onChanged: (_) => onToggle!(i),
+                    ),
+                  )
+                else
+                  CircleAvatar(
+                    radius: 12,
+                    child: Text(
+                      '${i + 1}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
                   ),
-                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: RichMessage(
                     text: items[i],
-                    style: theme.textTheme.bodyMedium,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: tracking && checked!.contains(i)
+                          ? theme.colorScheme.onSurfaceVariant
+                          : null,
+                      decoration: tracking && checked!.contains(i)
+                          ? TextDecoration.lineThrough
+                          : null,
+                    ),
                     linkColor: theme.colorScheme.primary,
                   ),
                 ),
@@ -319,6 +372,64 @@ class _StepList extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _TrackingCard extends StatelessWidget {
+  const _TrackingCard({
+    required this.progress,
+    required this.total,
+    required this.onStop,
+  });
+
+  final TramiteProgress progress;
+  final int total;
+  final VoidCallback onStop;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final done = progress.completed.where((i) => i < total).length;
+    final finished = total > 0 && done >= total;
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  finished ? Icons.check_circle : Icons.timelapse,
+                  size: 20,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    finished
+                        ? '¡Trámite completado!'
+                        : 'Tu avance: $done de $total pasos',
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(value: total == 0 ? 0 : done / total),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: onStop,
+                child: const Text('Dejar de seguir'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

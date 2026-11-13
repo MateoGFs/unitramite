@@ -6,6 +6,9 @@ import '../widgets/tramite_card.dart';
 import 'assistant_screen.dart';
 import 'tramite_detail_screen.dart';
 
+import '../providers/progress_provider.dart';
+import 'my_tramites_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -79,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 tramite: tramite,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
-                    builder: (_) => TramiteDetailScreen(summary: tramite),
+                    builder: (_) => TramiteDetailScreen(tramiteId: tramite.id),
                   ),
                 ),
               ),
@@ -92,11 +95,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tramites = context.watch<TramitesProvider>();
+    final activeCount = context.watch<ProgressProvider>().activeCount;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('UniTrámite'),
         actions: [
+          IconButton(
+            icon: Badge.count(
+              count: activeCount,
+              isLabelVisible: activeCount > 0,
+              child: const Icon(Icons.checklist),
+            ),
+            tooltip: 'Mis trámites',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const MyTramitesScreen(),
+              ),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.chat_bubble_outline),
             tooltip: 'Abrir conversación',

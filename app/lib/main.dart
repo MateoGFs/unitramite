@@ -7,7 +7,8 @@ import 'providers/tramites_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/api_assistant_service.dart';
 import 'services/api_tramites_service.dart';
-
+import 'providers/progress_provider.dart';
+import 'services/shared_prefs_progress_store.dart';
 void main() {
   runApp(
     MultiProvider(
@@ -17,6 +18,10 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (_) => TramitesProvider(ApiTramitesService())..load(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => ProgressProvider(SharedPrefsProgressStore())..load(),
         ),
       ],
       child: const UniTramiteApp(),
