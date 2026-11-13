@@ -26,7 +26,10 @@ class _AssistantScreenState extends State<AssistantScreen> {
     final question = widget.initialQuestion;
     if (question != null && question.trim().isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) context.read<ChatProvider>().sendQuestion(question);
+        if (!mounted) return;
+        final chat = context.read<ChatProvider>();
+        chat.startConversation();
+        chat.sendQuestion(question);
       });
     }
   }
@@ -71,9 +74,11 @@ class _AssistantScreenState extends State<AssistantScreen> {
             title: const Text('Asistente'),
             actions: [
               IconButton(
-                icon: const Icon(Icons.delete_outline),
+                icon: const Icon(Icons.add_comment_outlined),
                 tooltip: 'Nueva conversación',
-                onPressed: chat.isLoading ? null : chat.clear,
+                onPressed: chat.isLoading || !chat.hasMessages
+                    ? null
+                    : chat.startConversation,
               ),
             ],
           ),

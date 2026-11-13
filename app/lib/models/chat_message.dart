@@ -14,8 +14,26 @@ class ChatMessage {
     this.status = MessageStatus.normal,
   });
 
+  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+    return ChatMessage(
+      text: json['text'] as String,
+      role: MessageRole.values.byName(json['role'] as String),
+      status: MessageStatus.values.byName(json['status'] as String),
+      sources: (json['sources'] as List<dynamic>? ?? [])
+          .map((e) => SourceRef.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
   final String text;
   final MessageRole role;
   final List<SourceRef> sources;
   final MessageStatus status;
+
+  Map<String, dynamic> toJson() => {
+        'text': text,
+        'role': role.name,
+        'status': status.name,
+        'sources': sources.map((s) => s.toJson()).toList(),
+      };
 }

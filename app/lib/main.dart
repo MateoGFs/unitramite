@@ -9,12 +9,16 @@ import 'services/api_assistant_service.dart';
 import 'services/api_tramites_service.dart';
 import 'providers/progress_provider.dart';
 import 'services/shared_prefs_progress_store.dart';
+import 'services/shared_prefs_conversation_store.dart';
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ChatProvider(ApiAssistantService()),
+          create: (_) => ChatProvider(
+            ApiAssistantService(),
+            SharedPrefsConversationStore(),
+          )..load(),
         ),
         ChangeNotifierProvider(
           create: (_) => TramitesProvider(ApiTramitesService())..load(),

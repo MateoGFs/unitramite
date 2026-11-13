@@ -8,6 +8,7 @@ import 'tramite_detail_screen.dart';
 
 import '../providers/progress_provider.dart';
 import 'my_tramites_screen.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -101,6 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('UniTrámite'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'Historial',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const HistoryScreen()),
+            ),
+          ),
           IconButton(
             icon: Badge.count(
               count: activeCount,

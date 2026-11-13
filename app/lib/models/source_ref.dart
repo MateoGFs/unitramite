@@ -6,6 +6,14 @@ class SourceRef {
     this.url,
   });
 
+  factory SourceRef.fromJson(Map<String, dynamic> json) {
+    return SourceRef(
+      documentName: json['name'] as String,
+      page: json['page'] as int?,
+      url: json['url'] as String?,
+    );
+  }
+
   final String documentName;
   final int? page;
   final String? url;
@@ -13,4 +21,10 @@ class SourceRef {
   /// Texto para mostrar en pantalla.
   String get label =>
       page != null ? '$documentName, pág. $page' : documentName;
+
+  Map<String, dynamic> toJson() => {
+        'name': documentName,
+        'page': page,
+        'url': url,
+      };
 }

@@ -78,5 +78,5 @@ OCARA / Oficina de Control, Registro Académico y Admisiones de la Universidad d
 2. ¿Qué documentos necesito para cancelar el semestre?  
 3. ¿Hasta cuándo puedo solicitar la cancelación?  
 4. ¿Cuánto cuesta cancelar el semestre?  
-5. ¿Pagar el recibo garantiza que aprobarán mi solicitud?  
+5. ¿Pagar el recibo de cancelación de semestre garantiza que aprobarán mi solicitud? 
 6. ¿Cancelar el semestre significa que abandono definitivamente la carrera?

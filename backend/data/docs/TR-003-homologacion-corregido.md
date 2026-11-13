@@ -12,7 +12,6 @@ contacto: asesoria6ocara@udenar.edu.co
 
 ## Intenciones o preguntas que debe reconocer la IA
 
-- Tengo un título técnico relacionado con mi carrera, ¿qué beneficios tengo?  
 - ¿Puedo homologar materias que ya he cursado en otra institución?  
 - ¿Cuándo puedo homologar materias y avanzar en mi plan de estudios?  
 - ¿Cómo solicito una homologación de materias?  
