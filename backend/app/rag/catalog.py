@@ -64,7 +64,8 @@ def _detail(t: Tramite) -> TramiteDetail:
         dependencia=t.dependencia,
         contacto=t.contacto,
         fecha_verificacion=t.fecha_verificacion,
-        preguntas=_items(_section(t, "Intenciones"))[:3],
+        # Se sugieren las preguntas de prueba, que ya están comprobadas.
+        preguntas=(t.test_questions or _items(_section(t, "Intenciones")))[:3],
         fuentes=[Source(document_name=s.title, url=s.url) for s in t.sources],
     )
 
