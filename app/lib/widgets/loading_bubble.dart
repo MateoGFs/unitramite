@@ -1,34 +1,46 @@
 import 'package:flutter/material.dart';
 
-/// Se muestra mientras el asistente procesa la pregunta.
+import 'assistant_avatar.dart';
+import 'assistant_surface.dart';
+import 'typing_dots.dart';
+
+/// Se muestra mientras el asistente busca la respuesta.
 class LoadingBubble extends StatelessWidget {
   const LoadingBubble({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: scheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(strokeWidth: 2),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AssistantAvatar(),
+          const SizedBox(width: 8),
+          Flexible(
+            child: AssistantSurface(
+              accent: scheme.primary,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TypingDots(color: scheme.primary),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      'Buscando en los trámites verificados…',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(width: 12),
-            Text('Buscando en los documentos oficiales…'),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
