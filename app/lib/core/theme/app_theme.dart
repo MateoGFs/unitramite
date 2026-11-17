@@ -8,26 +8,36 @@ class AppTheme {
   AppTheme._();
 
   static TextTheme _textTheme(TextTheme base) {
-    final body = GoogleFonts.publicSansTextTheme(base).apply(
-      bodyColor: AppColors.text,
-      displayColor: AppColors.text,
-    );
+    // Texto corrido: Public Sans.
+    TextStyle body(TextStyle? style) =>
+        GoogleFonts.publicSans(textStyle: style, color: AppColors.text);
 
+    // Títulos: Bricolage Grotesque.
     TextStyle title(TextStyle? style, FontWeight weight, double spacing) {
       return GoogleFonts.bricolageGrotesque(
         textStyle: style,
+        color: AppColors.text,
         fontWeight: weight,
         letterSpacing: spacing,
       );
     }
 
-    return body.copyWith(
-      headlineLarge: title(body.headlineLarge, FontWeight.w700, -0.6),
-      headlineMedium: title(body.headlineMedium, FontWeight.w700, -0.5),
-      headlineSmall: title(body.headlineSmall, FontWeight.w700, -0.3),
-      titleLarge: title(body.titleLarge, FontWeight.w700, -0.2),
-      titleMedium: title(body.titleMedium, FontWeight.w600, 0),
-      titleSmall: title(body.titleSmall, FontWeight.w600, 0),
+    return base.copyWith(
+      displayLarge: body(base.displayLarge),
+      displayMedium: body(base.displayMedium),
+      displaySmall: body(base.displaySmall),
+      headlineLarge: title(base.headlineLarge, FontWeight.w700, -0.6),
+      headlineMedium: title(base.headlineMedium, FontWeight.w700, -0.5),
+      headlineSmall: title(base.headlineSmall, FontWeight.w700, -0.3),
+      titleLarge: title(base.titleLarge, FontWeight.w700, -0.2),
+      titleMedium: title(base.titleMedium, FontWeight.w600, 0),
+      titleSmall: title(base.titleSmall, FontWeight.w600, 0),
+      bodyLarge: body(base.bodyLarge),
+      bodyMedium: body(base.bodyMedium),
+      bodySmall: body(base.bodySmall),
+      labelLarge: body(base.labelLarge),
+      labelMedium: body(base.labelMedium),
+      labelSmall: body(base.labelSmall),
     );
   }
 

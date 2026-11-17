@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         scrollDirection: Axis.horizontal,
                         itemCount: kSuggestedQuestions.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 8),
+                        separatorBuilder: (_, _) => const SizedBox(width: 8),
                         itemBuilder: (context, index) {
                           final question = kSuggestedQuestions[index];
                           return ActionChip(
