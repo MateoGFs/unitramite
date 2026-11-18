@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/utils/format.dart';
+import '../models/conversation.dart';
 import '../providers/chat_provider.dart';
+import '../widgets/state_message.dart';
 import 'assistant_screen.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -53,52 +55,30 @@ class HistoryScreen extends StatelessWidget {
             ],
           ),
           body: items.isEmpty
-              ? const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: Text(
-                      'Aún no tienes conversaciones guardadas.\n\n'
-                      'Cada pregunta que le hagas al asistente quedará '
-                      'registrada aquí.',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+              ? const StateMessage(
+                  icon: Icons.history,
+                  title: 'Aún no hay conversaciones',
+                  message: 'Cada pregunta que le hagas al asistente '
+                      'quedará guardada aquí.',
                 )
               : Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
+                    constraints: const BoxConstraints(maxWidth: 640),
                     child: ListView(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(20),
                       children: [
                         for (final conversation in items)
-                          Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            clipBehavior: Clip.antiAlias,
-                            child: ListTile(
-                              title: Text(
-                                conversation.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Text(
-                                '${formatDateTime(conversation.updatedAt)} · '
-                                '${conversation.questionCount} '
-                                '${conversation.questionCount == 1 ? 'pregunta' : 'preguntas'}',
-                              ),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete_outline),
-                                tooltip: 'Eliminar conversación',
-                                onPressed: () => chat.delete(conversation.id),
-                              ),
-                              onTap: () {
-                                chat.open(conversation.id);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute<void>(
-                                    builder: (_) => const AssistantScreen(),
-                                  ),
-                                );
-                              },
-                            ),
+                          _ConversationCard(
+                            conversation: conversation,
+                            onOpen: () {
+                              chat.open(conversation.id);
+                              Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const AssistantScreen(),
+                                ),
+                              );
+                            },
+                            onDelete: () => chat.delete(conversation.id),
                           ),
                       ],
                     ),
@@ -106,6 +86,86 @@ class HistoryScreen extends StatelessWidget {
                 ),
         );
       },
+    );
+  }
+}
+
+class _ConversationCard extends StatelessWidget {
+  const _ConversationCard({
+    required this.conversation,
+    required this.onOpen,
+    required this.onDelete,
+  });
+
+  final Conversation conversation;
+  final VoidCallback onOpen;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final count = conversation.questionCount;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onOpen,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: scheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.chat_bubble_outline,
+                    size: 20,
+                    color: scheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        conversation.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '$count ${count == 1 ? 'pregunta' : 'preguntas'}',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      Text(
+                        formatDateTime(conversation.updatedAt),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: 'Eliminar conversación',
+                  onPressed: onDelete,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
