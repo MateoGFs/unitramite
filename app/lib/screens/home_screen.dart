@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Pregunta con tus palabras. Respondo solo con '
                       'información oficial de la Universidad de Nariño.',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFFC9D2EE),
+                        color: AppColors.onInkMuted,
                       ),
                     ),
                     const SizedBox(height: 20),
